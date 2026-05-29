@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,16 +11,60 @@ body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:20px}
 .shop-title{font-size:24px;font-weight:900}
 .shop-address{font-size:13px;font-weight:700}
 .bill-info{font-size:13px;font-weight:800}
-.display{background:#1f1f1f;color:#fff;border-radius:12px;padding:20px;text-align:center;font-size:52px;font-weight:900;margin-bottom:15px}
-.main{display:grid;grid-template-columns:40% 60%;gap:15px}
-.left-panel{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-.inputs{display:grid;grid-template-columns:42% 22% 22%;gap:8px}
-.inputs input{padding:12px;font-size:24px;font-weight:900;text-align:center;border:2px solid #ddd;border-radius:8px;width:100%;box-sizing:border-box}
-.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-button{height:50px;border:none;border-radius:8px;font-size:18px;font-weight:900;cursor:pointer;color:white}
-.add{background:#3498db}.print{background:#27ae60}.newbill{background:#8e44ad}
 
-table{
+.display{
+background:#1f1f1f;color:#fff;border-radius:12px;
+padding:20px;text-align:center;
+font-size:52px;font-weight:900;
+margin-bottom:15px;
+}
+
+.main{display:grid;grid-template-columns:40% 60%;gap:15px}
+
+.left-panel{
+background:#fff;padding:15px;border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,.1)
+}
+
+.inputs{
+display:grid;
+grid-template-columns:42% 22% 22%;
+gap:8px;
+}
+
+.inputs input{
+padding:12px;
+font-size:24px;
+font-weight:900;
+text-align:center;
+border:2px solid #ddd;
+border-radius:8px;
+width:100%;
+box-sizing:border-box;
+}
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-top:12px;
+}
+
+button{
+height:50px;
+border:none;
+border-radius:8px;
+font-size:18px;
+font-weight:900;
+cursor:pointer;
+color:white;
+}
+
+.add{background:#3498db}
+.print{background:#27ae60}
+.newbill{background:#8e44ad}
+
+ table{
 width:100%;
 border-collapse:collapse;
 background:#fff;
@@ -32,46 +77,77 @@ padding:8px;
 text-align:center;
 font-weight:800;
 }
-.remove-btn{background:none;border:none;color:red;font-size:18px;font-weight:900;cursor:pointer}
+.remove-btn{
+background:none;
+border:none;
+color:red;
+font-size:18px;
+font-weight:900;
+cursor:pointer;
+}
+
 .print-footer,.print-total-row{display:none}
 
 @media print{
+
 .left-panel,.remove-btn,.col-remove{display:none!important;}
+
 body{padding:0;width:72mm;background:#fff;font-size:12px}
+
 .receipt-header{text-align:left}
 .shop-title{text-align:center;font-size:24px}
 .shop-address{text-align:center}
 .bill-info{text-align:left;font-size:14px;font-weight:bold}
+
 .display{display:none}
 .main{display:block}
-table{width:100%;border-collapse:collapse;table-layout:fixed;border:3px solid #000}
+
+table{
+width:100%;
+border-collapse:collapse;
+table-layout:fixed;
+}
+
 th,td{
 border:2px solid #000;
 font-size:14px;
 padding:3px;
 }
+
 .print-total-row{display:table-row}
-.print-footer{display:block;text-align:center;margin-top:8px;font-weight:bold}
+.print-footer{
+display:block;
+text-align:center;
+margin-top:8px;
+font-weight:bold;
+}
 }
 </style>
 </head>
 <body>
+
 <div class="container">
+
 <div class="receipt-header">
 <div class="shop-title" id="shopName"></div>
 <div class="shop-address" id="shopAddress"></div>
-<div class="bill-info">Bill No : <span id="billNo"></span><br>Date : <span id="billDate"></span></div>
+<div class="bill-info">
+Bill No : <span id="billNo"></span><br>
+Date : <span id="billDate"></span>
+</div>
 </div>
 
 <div class="display">₹ <span id="grand">0.00</span></div>
 
 <div class="main">
+
 <div class="left-panel">
 <div class="inputs">
 <input type="number" id="price" placeholder="Price">
 <input type="number" id="qty" value="1">
 <input type="number" id="disc" placeholder="Disc %">
 </div>
+
 <div class="buttons">
 <button class="add" onclick="addItem()">ADD</button>
 <button class="print" onclick="printBill()">PRINT</button>
@@ -81,8 +157,18 @@ padding:3px;
 
 <div>
 <table>
-<thead><tr id="tableHeader"></tr></thead>
+<thead>
+<tr>
+<th>Price</th>
+<th>Qty</th>
+<th id="discHeader">Disc%</th>
+<th>Total</th>
+<th class="col-remove">X</th>
+</tr>
+</thead>
+
 <tbody id="rows"></tbody>
+
 <tfoot>
 <tr class="print-total-row">
 <td id="totalCell" colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
@@ -91,8 +177,12 @@ Total: ₹ <span id="grandFooter">0.00</span>
 </tr>
 </tfoot>
 </table>
-<div class="print-footer">Thank You - Visit Again!</div>
+
+<div class="print-footer">
+Thank You - Visit Again!
 </div>
+</div>
+
 </div>
 </div>
 
@@ -100,91 +190,171 @@ Total: ₹ <span id="grandFooter">0.00</span>
 let items=[];
 
 function generateBillNo(){
- const d=new Date();
- return String(d.getDate()).padStart(2,"0")+String(d.getMonth()+1).padStart(2,"0")+String(d.getFullYear()).slice(-2)+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0");
+const d=new Date();
+return String(d.getDate()).padStart(2,"0")+
+String(d.getMonth()+1).padStart(2,"0")+
+String(d.getFullYear()).slice(-2)+
+String(d.getHours()).padStart(2,"0")+
+String(d.getMinutes()).padStart(2,"0");
 }
 
 let billNoValue=generateBillNo();
+
 billNo.innerText=billNoValue;
 billDate.innerText=new Date().toLocaleString();
+
 shopName.innerText=localStorage.getItem("shopName")||"My Shop";
 shopAddress.innerText=localStorage.getItem("shopAddress")||"";
 
-function focusPrice(){ price.focus(); price.select(); }
-window.onload=()=>{ render(); focusPrice(); };
+function focusPrice(){
+price.focus();
+price.select();
+}
 
-price.addEventListener("keydown",e=>{ if(e.key==="Enter"){ qty.focus(); qty.select(); }});
-qty.addEventListener("keydown",e=>{ if(e.key==="Enter"){ disc.focus(); disc.select(); }});
-disc.addEventListener("keydown",e=>{ if(e.key==="Enter"){ addItem(); }});
+function focusQty(){
+qty.focus();
+qty.select();
+}
+
+window.onload=()=>focusPrice();
+
+price.addEventListener("keydown",e=>{
+if(e.key==="Enter"){
+focusQty();
+}
+});
+
+qty.addEventListener("focus",()=>qty.select());
+qty.addEventListener("click",()=>qty.select());
+
+qty.addEventListener("keydown",e=>{
+if(e.key==="Enter"){
+disc.focus();
+disc.select();
+}
+});
+
+disc.addEventListener("keydown",e=>{
+if(e.key==="Enter"){
+addItem();
+}
+});
 
 function render(){
- rows.innerHTML="";
- let total=0;
 
- const hasDiscount=items.some(i=>i.disc>0);
+rows.innerHTML="";
+let total=0;
 
- tableHeader.innerHTML=`
- <th>Price</th>
- <th>Qty</th>
- ${hasDiscount ? '<th>Disc%</th>' : ''}
- <th>Total</th>
- <th class="col-remove">X</th>`;
+const hasDiscount=items.some(i=>i.disc>0);
+discHeader.style.display=hasDiscount?"":"none";
 
- items.forEach((item,index)=>{
-   const base=item.price*item.qty;
-   const final=base-(base*item.disc/100);
-   total+=final;
+items.forEach((item,index)=>{
 
-   rows.innerHTML += `
-   <tr>
-   <td>${item.price.toFixed(2)}</td>
-   <td>${item.qty}</td>
-   ${hasDiscount ? `<td>${item.disc||''}</td>` : ''}
-   <td>${final.toFixed(2)}</td>
-   <td class="col-remove"><button class="remove-btn" onclick="removeItem(${index})">✖</button></td>
-   </tr>`;
- });
+const base=item.price*item.qty;
+const final=base-(base*item.disc/100);
+total+=final;
 
- grand.innerText=total.toFixed(2);
+rows.innerHTML+=`
+<tr>
+<td ondblclick="editCell(${index},'price')">${item.price.toFixed(2)}</td>
+<td ondblclick="editCell(${index},'qty')">${item.qty}</td>
+<td style="display:${hasDiscount?'':'none'}"
+ondblclick="editCell(${index},'disc')">${item.disc>0?item.disc:''}</td>
+<td>${final.toFixed(2)}</td>
+<td class="col-remove">
+<button class="remove-btn" onclick="removeItem(${index})">✖</button>
+</td>
+</tr>`;
+});
+
+grand.innerText=total.toFixed(2);
 grandFooter.innerText=total.toFixed(2);
 
 document.getElementById("totalCell").colSpan =
     hasDiscount ? 4 : 3;
 }
-}
 
 function addItem(){
- const p=parseFloat(price.value);
- const q=parseFloat(qty.value)||1;
- const d=parseFloat(disc.value)||0;
- if(isNaN(p)) return;
 
- items.push({price:p,qty:q,disc:d});
- render();
+const p=parseFloat(price.value);
+const q=parseFloat(qty.value)||1;
+const d=parseFloat(disc.value)||0;
 
- price.value="";
- qty.value="1";
- disc.value="";
- focusPrice();
+if(isNaN(p)) return;
+
+items.push({price:p,qty:q,disc:d});
+
+render();
+
+price.value="";
+qty.value="1";
+disc.value="";
+
+focusPrice();
 }
 
-function removeItem(i){ items.splice(i,1); render(); }
+function removeItem(i){
+items.splice(i,1);
+render();
+}
+
+function editCell(i,key){
+const v=prompt("Edit "+key,items[i][key]);
+if(v===null)return;
+items[i][key]=parseFloat(v);
+render();
+}
 
 function clearBill(){
- items=[];
- render();
- price.value="";
- qty.value="1";
- disc.value="";
- billNoValue=generateBillNo();
- billNo.innerText=billNoValue;
- focusPrice();
+
+items=[];
+render();
+
+price.value="";
+qty.value="1";
+disc.value="";
+
+billNoValue=generateBillNo();
+billNo.innerText=billNoValue;
+
+focusPrice();
 }
 
 function printBill(){
- if(items.length===0) return;
- window.print();
+if(items.length===0)return;
+saveBillHistory();
+window.print();
 }
+
+
+function saveBillHistory(){
+const bills=JSON.parse(localStorage.getItem('bills')||'[]');
+let total=parseFloat(document.getElementById('grand').innerText)||0;
+bills.unshift({billNo:billNoValue,date:new Date().toISOString(),total:total,items:[...items]});
+localStorage.setItem('bills',JSON.stringify(bills));
+}
+const params=new URLSearchParams(location.search);
+if(params.get('view')==='1'){
+ const idx=localStorage.getItem('viewBillIndex');
+ const bills=JSON.parse(localStorage.getItem('bills')||'[]');
+ const bill=bills[idx];
+ if(bill){
+   items=bill.items||[];
+   billNoValue=bill.billNo;
+   billNo.innerText=bill.billNo;
+   billDate.innerText=new Date(bill.date).toLocaleString();
+   render();
+   setTimeout(()=>{ if(params.get('print')==='1') window.print();},300);
+ }
+}
+
+document.addEventListener("keydown",e=>{
+if(e.code!=="Space")return;
+e.preventDefault();
+if(items.length===0)return;
+printBill();
+});
 </script>
+
 </body>
 </html>
