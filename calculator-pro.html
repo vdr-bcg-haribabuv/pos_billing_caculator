@@ -103,15 +103,14 @@ body{padding:0;width:72mm;background:#fff;font-size:12px}
 .main{display:block}
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
-    border:3px solid #000;
+width:100%;
+border-collapse:collapse;
+table-layout:fixed;
 }
+
 th,td{
-    border:2px solid #000;
-    font-size:14px;
-    padding:3px;
+font-size:14px;
+padding:3px;
 }
 
 .print-total-row{display:table-row}
@@ -269,8 +268,6 @@ ondblclick="editCell(${index},'disc')">${item.disc>0?item.disc:''}</td>
 
 grand.innerText=total.toFixed(2);
 grandFooter.innerText=total.toFixed(2);
-document.getElementById("grandTotalCell").colSpan =
-    hasDiscount ? 4 : 3;
 }
 
 function addItem(){
