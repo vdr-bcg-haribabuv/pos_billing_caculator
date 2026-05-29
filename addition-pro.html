@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calculator Pro - Receipt Edition</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:20px}
+.container{max-width:1000px;margin:auto}
+.receipt-header{text-align:center;margin-bottom:10px}
+.shop-title{font-size:24px;font-weight:900}
+.shop-address{font-size:13px;font-weight:700}
+.bill-info{font-size:13px;font-weight:800;margin-top:5px}
+.display{background:#222;color:#fff;padding:20px;border-radius:10px;text-align:center;font-size:42px;font-weight:900;margin-bottom:15px}
+.calc-panel{display:flex;gap:20px}
+.left{flex:1}
+.right{width:420px}
+.amount-input{width:100%;padding:15px;font-size:32px;font-weight:900;text-align:right;box-sizing:border-box}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.keypad button{padding:18px;font-size:20px;font-weight:900;border:none;border-radius:8px;color:#fff;cursor:pointer}
+.add{background:#3498db}.print{background:#27ae60}.clear{background:#e67e22}.newbill{background:#8e44ad}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{border:1px solid #000;padding:6px;text-align:center;font-size:16px;font-weight:900}
+tfoot th{font-size:20px}
+.remove{background:none;color:red;border:none;font-size:22px;font-weight:900;cursor:pointer;padding:0}.action-col{width:40px}
+.print-footer{display:none}
+@media print{
+.keypad,.amount-input,.remove,.action-col,.display{display:none!important}
+body{padding:0;width:72mm;background:#fff}.shop-title{font-size:24px;font-weight:900}.bill-info{font-size:14px;font-weight:900}th,td{font-size:14px;padding:5px}
+.display{background:none;color:#000;font-size:20px;padding:0}
+.print-footer{display:block;text-align:center;margin-top:8px;font-weight:bold}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="receipt-header">
+<div class="shop-title" id="shopName">My Shop</div>
+<div class="shop-address" id="shopAddress"></div>
+<div class="bill-info">
+Bill No : <span id="billNo"></span><br>
+Date : <span id="billDate"></span>
+</div>
+</div>
+
+<div class="display">₹ <span id="grandTotal">0.00</span></div>
+
+<div class="calc-panel">
+<div class="left">
+<input type="number" id="amountInput" class="amount-input" placeholder="Enter Amount">
+<div class="keypad">
+<button class="add" onclick="addAmount()">Add</button>
+<button class="print" onclick="printBill()">Print</button>
+
+<button class="newbill" onclick="newBill()">New Bill</button>
+</div>
+</div>
+
+<div class="right">
+<table>
+<thead>
+<tr><th>Amount</th><th class="action-col"></th></tr>
+</thead>
+<tbody id="priceTable"></tbody>
+<tfoot>
+<tr><th colspan="2">Total : ₹ <span id="total">0.00</span></th></tr>
+</tfoot>
+</table>
+<div class="print-footer">Thank You - Visit Again!</div>
+</div>
+</div>
+</div>
+
+<script>
+let prices=[];
+let total=0;
+
+function generateBillNo(){
+const now=new Date();
+return String(now.getDate()).padStart(2,'0')+
+String(now.getMonth()+1).padStart(2,'0')+
+String(now.getFullYear()).slice(-2)+
+String(now.getHours()).padStart(2,'0')+
+String(now.getMinutes()).padStart(2,'0');
+}
+
+function formatDate(date){
+return new Date(date).toLocaleString();
+}
+
+let billNoValue=generateBillNo();
+
+document.getElementById("billNo").innerText=billNoValue;
+document.getElementById("billDate").innerText=formatDate(new Date());
+document.getElementById("shopName").innerText=localStorage.getItem("shopName")||"My Shop";
+document.getElementById("shopAddress").innerText=localStorage.getItem("shopAddress")||"";
+
+function render(){
+const table=document.getElementById("priceTable");
+table.innerHTML="";
+total=0;
+
+prices.forEach((value,index)=>{
+total+=value;
+table.innerHTML += `
+<tr>
+<td ondblclick="editItem(${index})">${value.toFixed(2)}</td>
+<td class="action-col">
+<button class="remove" onclick="removeItem(${index})">✖</button>
+</td>
+</tr>`;
+});
+
+document.getElementById("total").innerText=total.toFixed(2);
+document.getElementById("grandTotal").innerText=total.toFixed(2);
+}
+
+function addAmount(){
+const value=parseFloat(amountInput.value);
+if(isNaN(value)) return;
+prices.push(value);
+render();
+amountInput.value="";
+amountInput.focus();
+}
+
+function removeItem(index){ prices.splice(index,1); render(); }
+function clearLast(){ prices.pop(); render(); }
+
+function editItem(index){
+const value=prompt("Edit Amount",prices[index]);
+if(value===null) return;
+prices[index]=parseFloat(value);
+render();
+}
+
+function newBill(){
+prices=[];
+render();
+billNoValue=generateBillNo();
+billNo.innerText=billNoValue;
+amountInput.focus();
+}
+
+function printBill(){
+if(prices.length===0) return;
+window.print();
+}
+
+amountInput.addEventListener("keydown",e=>{
+if(e.key==="Enter"){e.preventDefault();addAmount();}
+});
+
+document.addEventListener("keydown",e=>{
+if(e.code==="Space"){
+e.preventDefault();
+printBill();
+}
+});
+
+render();
+amountInput.focus();
+</script>
+</body>
+</html>
