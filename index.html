@@ -1,33 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Billing Calculator</title>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Billing Calculator</title>
 <style>
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8}
-.header{background:#1f1f1f;color:white;padding:15px;text-align:center;font-size:28px;font-weight:900}
-.tabs{display:flex;justify-content:center;gap:10px;padding:15px;background:white;border-bottom:1px solid #ddd}
-.tab{padding:12px 24px;border:none;border-radius:8px;cursor:pointer;font-size:16px;font-weight:700}
-.active{background:#3498db;color:white}
-iframe{width:100%;height:calc(100vh - 95px);border:none;background:white}
-</style>
-</head>
-<body>
+.header{background:#1f1f1f;color:#fff;padding:15px;text-align:center;font-size:28px;font-weight:900}
+.tabs{display:flex;justify-content:center;gap:10px;padding:12px;background:#fff;border-bottom:1px solid #ddd;flex-wrap:wrap}
+.tab{padding:12px 20px;border:none;border-radius:8px;background:#e9ecef;cursor:pointer;font-weight:700}
+.active{background:#3498db;color:#fff}
+iframe{width:100%;height:calc(100vh - 90px);border:none}
+</style></head><body>
 <div class="header">Billing Calculator</div>
-
 <div class="tabs">
-<button id="tab1" class="tab active" onclick="loadPage('addition-pro.html',this)">Simple Billing</button>
-<button id="tab2" class="tab" onclick="loadPage('calculator-pro.html',this)">Qty & Discount Billing</button>
+<button class="tab active" onclick="loadPage('addition-pro.html',this)">Simple Billing</button>
+<button class="tab" onclick="loadPage('calculator-pro.html',this)">Qty & Discount Billing</button>
+<button class="tab" onclick="loadPage('bills.html',this)">Bills</button>
+<button class="tab" onclick="loadPage('config.html',this)">Configuration</button>
 </div>
-
 <iframe id="viewer" src="addition-pro.html"></iframe>
-
 <script>
 function loadPage(page,btn){
-document.getElementById('viewer').src=page;
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+viewer.src=page;
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
 btn.classList.add('active');
 }
-</script>
-</body>
-</html>
+</script></body></html>
