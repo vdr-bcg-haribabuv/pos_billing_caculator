@@ -90,56 +90,35 @@ cursor:pointer;
 
 @media print{
 
-.keypad,
-.amount-input,
-.remove,
-.action-col,
-.display{
-    display:none !important;
-}
+.left-panel,.remove-btn,.col-remove{display:none!important;}
 
-body{
-    padding:0;
-    width:72mm;
-    background:#fff;
-}
+body{padding:0;width:72mm;background:#fff;font-size:12px}
 
-.shop-title{
-    font-size:24px;
-    font-weight:900;
-}
+.receipt-header{text-align:left}
+.shop-title{text-align:center;font-size:24px}
+.shop-address{text-align:center}
+.bill-info{text-align:left;font-size:14px;font-weight:bold}
 
-.bill-info{
-    font-size:14px;
-    font-weight:900;
-}
+.display{display:none}
+.main{display:block}
 
-/* IMPORTANT */
 table{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
-    border:1px solid #000;
+width:100%;
+border-collapse:collapse;
+table-layout:fixed;
 }
 
-th,
-td{
-    border:1px solid #000 !important;
-    font-size:14px;
-    padding:4px;
-    text-align:center;
-    font-weight:900;
+th,td{
+font-size:14px;
+padding:3px;
 }
 
-tfoot th{
-    border:1px solid #000 !important;
-}
-
+.print-total-row{display:table-row}
 .print-footer{
-    display:block;
-    text-align:center;
-    margin-top:8px;
-    font-weight:bold;
+display:block;
+text-align:center;
+margin-top:8px;
+font-weight:bold;
 }
 }
 </style>
@@ -190,9 +169,9 @@ Date : <span id="billDate"></span>
 <tbody id="rows"></tbody>
 
 <tfoot>
-<tr>
-<td colspan="2" style="text-align:center;font-weight:bold">
-Total : ₹ <span id="total">0.00</span>
+<tr class="print-total-row">
+<td colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
+Total: ₹ <span id="grandFooter">0.00</span>
 </td>
 </tr>
 </tfoot>
