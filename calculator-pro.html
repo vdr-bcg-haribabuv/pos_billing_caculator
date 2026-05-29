@@ -162,7 +162,13 @@ Date : <span id="billDate"></span>
 <tr>
 <th>Price</th>
 <th>Qty</th>
-<th id="discHeader">Disc%</th>
+document.querySelector("thead tr").innerHTML = `
+<th>Price</th>
+<th>Qty</th>
+${hasDiscount ? '<th>Disc%</th>' : ''}
+<th>Total</th>
+<th class="col-remove">X</th>
+`;
 <th>Total</th>
 <th class="col-remove">X</th>
 </tr>
@@ -255,13 +261,17 @@ const base=item.price*item.qty;
 const final=base-(base*item.disc/100);
 total+=final;
 
-rows.innerHTML+=`
+rows.innerHTML += `
 <tr>
 <td ondblclick="editCell(${index},'price')">${item.price.toFixed(2)}</td>
 <td ondblclick="editCell(${index},'qty')">${item.qty}</td>
-<td style="display:${hasDiscount?'':'none'}"
-ondblclick="editCell(${index},'disc')">${item.disc>0?item.disc:''}</td>
+
+${hasDiscount
+  ? `<td ondblclick="editCell(${index},'disc')">${item.disc || ''}</td>`
+  : ''}
+
 <td>${final.toFixed(2)}</td>
+
 <td class="col-remove">
 <button class="remove-btn" onclick="removeItem(${index})">✖</button>
 </td>
