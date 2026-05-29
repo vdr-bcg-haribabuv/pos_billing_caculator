@@ -318,7 +318,30 @@ focusPrice();
 
 function printBill(){
 if(items.length===0)return;
+saveBillHistory();
 window.print();
+}
+
+
+function saveBillHistory(){
+const bills=JSON.parse(localStorage.getItem('bills')||'[]');
+let total=parseFloat(document.getElementById('grand').innerText)||0;
+bills.unshift({billNo:billNoValue,date:new Date().toISOString(),total:total,items:[...items]});
+localStorage.setItem('bills',JSON.stringify(bills));
+}
+const params=new URLSearchParams(location.search);
+if(params.get('view')==='1'){
+ const idx=localStorage.getItem('viewBillIndex');
+ const bills=JSON.parse(localStorage.getItem('bills')||'[]');
+ const bill=bills[idx];
+ if(bill){
+   items=bill.items||[];
+   billNoValue=bill.billNo;
+   billNo.innerText=bill.billNo;
+   billDate.innerText=new Date(bill.date).toLocaleString();
+   render();
+   setTimeout(()=>{ if(params.get('print')==='1') window.print();},300);
+ }
 }
 
 document.addEventListener("keydown",e=>{
