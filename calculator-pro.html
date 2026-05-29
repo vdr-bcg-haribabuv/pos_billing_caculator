@@ -19,9 +19,19 @@ body{font-family:Arial,sans-serif;background:#f4f6f8;margin:0;padding:20px}
 button{height:50px;border:none;border-radius:8px;font-size:18px;font-weight:900;cursor:pointer;color:white}
 .add{background:#3498db}.print{background:#27ae60}.newbill{background:#8e44ad}
 
-table{width:100%;border-collapse:collapse;background:#fff;border:3px solid #000}
-th,td{border:2px solid #000;padding:8px;text-align:center;font-weight:800}
+table{
+width:100%;
+border-collapse:collapse;
+background:#fff;
+border:3px solid #000;
+}
 
+th,td{
+border:2px solid #000;
+padding:8px;
+text-align:center;
+font-weight:800;
+}
 .remove-btn{background:none;border:none;color:red;font-size:18px;font-weight:900;cursor:pointer}
 .print-footer,.print-total-row{display:none}
 
@@ -35,7 +45,11 @@ body{padding:0;width:72mm;background:#fff;font-size:12px}
 .display{display:none}
 .main{display:block}
 table{width:100%;border-collapse:collapse;table-layout:fixed;border:3px solid #000}
-th,td{border:2px solid #000;font-size:14px;padding:3px}
+th,td{
+border:2px solid #000;
+font-size:14px;
+padding:3px;
+}
 .print-total-row{display:table-row}
 .print-footer{display:block;text-align:center;margin-top:8px;font-weight:bold}
 }
@@ -71,7 +85,7 @@ th,td{border:2px solid #000;font-size:14px;padding:3px}
 <tbody id="rows"></tbody>
 <tfoot>
 <tr class="print-total-row">
-<td colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
+<td id="totalCell" colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
 Total: ₹ <span id="grandFooter">0.00</span>
 </td>
 </tr>
@@ -132,9 +146,11 @@ function render(){
  });
 
  grand.innerText=total.toFixed(2);
- grandFooter.innerText=total.toFixed(2);
+grandFooter.innerText=total.toFixed(2);
 
- document.querySelector(".print-total-row td").colSpan = hasDiscount ? 5 : 4;
+document.getElementById("totalCell").colSpan =
+    hasDiscount ? 4 : 3;
+}
 }
 
 function addItem(){
