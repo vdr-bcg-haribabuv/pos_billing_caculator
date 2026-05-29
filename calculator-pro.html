@@ -64,19 +64,19 @@ color:white;
 .print{background:#27ae60}
 .newbill{background:#8e44ad}
 
- table{
+table{
 width:100%;
 border-collapse:collapse;
 background:#fff;
-border:3px solid #000;
 }
 
 th,td{
-border:2px solid #000;
+border:1px solid #d0d0d0;
 padding:8px;
 text-align:center;
 font-weight:800;
 }
+
 .remove-btn{
 background:none;
 border:none;
@@ -103,15 +103,15 @@ body{padding:0;width:72mm;background:#fff;font-size:12px}
 .main{display:block}
 
 table{
-width:100%;
-border-collapse:collapse;
-table-layout:fixed;
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+    border:3px solid #000;
 }
-
 th,td{
-border:2px solid #000;
-font-size:14px;
-padding:3px;
+    border:2px solid #000;
+    font-size:14px;
+    padding:3px;
 }
 
 .print-total-row{display:table-row}
@@ -171,7 +171,7 @@ Date : <span id="billDate"></span>
 
 <tfoot>
 <tr class="print-total-row">
-<td id="totalCell" colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
+<td colspan="4" style="text-align:center;font-weight:bold;font-size:15px">
 Total: ₹ <span id="grandFooter">0.00</span>
 </td>
 </tr>
@@ -269,8 +269,7 @@ ondblclick="editCell(${index},'disc')">${item.disc>0?item.disc:''}</td>
 
 grand.innerText=total.toFixed(2);
 grandFooter.innerText=total.toFixed(2);
-
-document.getElementById("totalCell").colSpan =
+document.getElementById("grandTotalCell").colSpan =
     hasDiscount ? 4 : 3;
 }
 
