@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Bill History</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f8;
+padding:10px;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+.top-nav{
+text-align:center;
+margin-bottom:12px;
+}
+
+.top-nav button{
+background:#34495e;
+}
+
+h2{
+text-align:center;
+margin-bottom:10px;
+color:#2c3e50;
+font-size:28px;
+font-weight:900;
+}
+
+.filters{
+text-align:center;
+margin-bottom:12px;
+}
+
+input{
+padding:7px;
+font-size:14px;
+font-weight:700;
+border:1px solid #bbb;
+border-radius:4px;
+margin:2px;
+}
+
+button{
+padding:7px 12px;
+border:none;
+border-radius:4px;
+cursor:pointer;
+color:white;
+font-size:13px;
+font-weight:800;
+margin:2px;
+}
+
+.search{
+background:#3498db;
+}
+
+.today{
+background:#27ae60;
+}
+
+.view{
+background:#8e44ad;
+}
+
+.print{
+background:#e67e22;
+}
+
+.clear{
+background:#e74c3c;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+}
+
+th,td{
+border:1px solid #000;
+padding:5px;
+text-align:center;
+font-size:15px;
+font-weight:900;
+}
+
+th{
+background:#f0f2f5;
+}
+
+.total-box{
+margin-top:10px;
+text-align:right;
+font-size:20px;
+font-weight:900;
+}
+
+.empty{
+padding:15px;
+text-align:center;
+font-weight:900;
+font-size:16px;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top-nav">
+
+<a href="index.html?v=2">
+<button>Addition (+)</button>
+</a>
+
+<a href="calculator.html?v=2">
+<button>Calculator</button>
+</a>
+
+<a href="config.html?v=2">
+<button>Config</button>
+</a>
+
+</div>
+
+<h2>Bill History</h2>
+
+<div class="filters">
+
+<input type="number"
+id="searchBill"
+placeholder="Bill No">
+
+<input type="date"
+id="searchDate">
+
+<button class="search"
+onclick="searchBills()">
+Search
+</button>
+
+<button class="today"
+onclick="todayBills()">
+Today's Bills
+</button>
+
+<button class="search"
+onclick="loadBills(uniqueBills)">
+Show All
+</button>
+
+<button class="clear"
+onclick="clearHistory()">
+Clear History
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Bill No</th>
+
+<th>Date & Time</th>
+
+<th>Total</th>
+
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="rows"></tbody>
+
+</table>
+
+<div class="total-box">
+
+Total : ₹
+<span id="overallTotal">
+0.00
+</span>
+
+</div>
+
+</div>
+
+<script>
+
+const bills =
+JSON.parse(
+localStorage.getItem("bills") || "[]"
+);
+
+const uniqueBills = [];
+
+const seen = new Set();
+
+bills.forEach(b=>{
+
+const key =
+b.billNo + "_" + b.total;
+
+if(!seen.has(key)){
+
+seen.add(key);
+
+uniqueBills.push(b);
+
+}
+
+});
+
+function formatDate(date){
+
+const d = new Date(date);
+
+const dd =
+String(d.getDate())
+.padStart(2,"0");
+
+const mm =
+String(d.getMonth()+1)
+.padStart(2,"0");
+
+const yyyy =
+d.getFullYear();
+
+let hh =
+d.getHours();
+
+const min =
+String(d.getMinutes())
+.padStart(2,"0");
+
+const ampm =
+hh >= 12 ? "PM" : "AM";
+
+hh = hh % 12;
+
+hh = hh ? hh : 12;
+
+hh =
+String(hh)
+.padStart(2,"0");
+
+return `${dd}/${mm}/${yyyy} ${hh}:${min} ${ampm}`;
+
+}
+
+function loadBills(data){
+
+rows.innerHTML="";
+
+let total=0;
+
+if(data.length===0){
+
+rows.innerHTML=`
+
+<tr>
+
+<td colspan="4"
+class="empty">
+
+No Bills Found
+
+</td>
+
+</tr>
+
+`;
+
+overallTotal.innerText="0.00";
+
+return;
+
+}
+
+data.forEach((bill,index)=>{
+
+total += Number(bill.total);
+
+const tr =
+document.createElement("tr");
+
+tr.innerHTML=`
+
+<td>
+${bill.billNo}
+</td>
+
+<td>
+${formatDate(bill.date)}
+</td>
+
+<td>
+₹${Number(bill.total)
+.toFixed(2)}
+</td>
+
+<td>
+
+<button class="view"
+onclick="viewBill(${index})">
+
+View
+
+</button>
+
+<button class="print"
+onclick="reprintBill(${index})">
+
+Re-print
+
+</button>
+
+</td>
+
+`;
+
+rows.appendChild(tr);
+
+});
+
+overallTotal.innerText=
+total.toFixed(2);
+
+}
+
+function searchBills(){
+
+const no =
+searchBill.value.trim();
+
+const dt =
+searchDate.value;
+
+let filtered = uniqueBills;
+
+if(no){
+
+filtered =
+filtered.filter(b=>
+String(b.billNo)
+.includes(no)
+);
+
+}
+
+if(dt){
+
+filtered =
+filtered.filter(b=>
+b.date.startsWith(dt)
+);
+
+}
+
+loadBills(filtered);
+
+}
+
+function todayBills(){
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+const filtered =
+uniqueBills.filter(b=>
+b.date.startsWith(today)
+);
+
+loadBills(filtered);
+
+}
+
+function viewBill(index){
+
+localStorage.setItem(
+"viewBillIndex",
+index
+);
+
+const bill =
+uniqueBills[index];
+
+if(bill.items){
+
+window.location.href =
+"calculator.html?view=1";
+
+}else{
+
+window.location.href =
+"index.html?view=1";
+
+}
+
+}
+
+function reprintBill(index){
+
+localStorage.setItem(
+"viewBillIndex",
+index
+);
+
+const bill =
+uniqueBills[index];
+
+if(bill.items){
+
+window.open(
+"calculator.html?view=1&print=1",
+"_blank"
+);
+
+}else{
+
+window.open(
+"index.html?view=1&print=1",
+"_blank"
+);
+
+}
+
+}
+
+function clearHistory(){
+
+const confirmDelete =
+confirm(
+"Delete all bill history?"
+);
+
+if(!confirmDelete)
+return;
+
+localStorage.removeItem("bills");
+
+location.reload();
+
+}
+
+loadBills(uniqueBills);
+
+</script>
+
+</body>
+
+</html>

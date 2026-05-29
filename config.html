@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Configuration</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f8;
+padding:15px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+font-size:28px;
+font-weight:900;
+color:#2c3e50;
+}
+
+label{
+display:block;
+margin-top:12px;
+margin-bottom:5px;
+font-size:15px;
+font-weight:800;
+}
+
+input,
+textarea{
+width:100%;
+padding:8px;
+font-size:15px;
+font-weight:700;
+border:1px solid #bbb;
+border-radius:4px;
+box-sizing:border-box;
+}
+
+textarea{
+resize:vertical;
+height:80px;
+}
+
+button{
+padding:8px 14px;
+border:none;
+border-radius:4px;
+cursor:pointer;
+color:white;
+font-size:14px;
+font-weight:800;
+margin-top:15px;
+margin-right:5px;
+}
+
+.save{
+background:#27ae60;
+}
+
+.back{
+background:#8e44ad;
+}
+
+.top-nav{
+text-align:center;
+margin-bottom:15px;
+}
+
+.top-nav button{
+background:#34495e;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top-nav">
+
+<a href="index.html?v=2">
+<button type="button">
+Addition (+)
+</button>
+</a>
+
+<a href="calculator.html?v=2">
+<button type="button">
+Calculator
+</button>
+</a>
+
+<a href="bills.html?v=2">
+<button type="button">
+Bill History
+</button>
+</a>
+
+</div>
+
+<h2>Shop Configuration</h2>
+
+<label>
+Shop Name
+</label>
+
+<input type="text"
+id="shopName">
+
+<label>
+Shop Address
+</label>
+
+<textarea
+id="shopAddress"></textarea>
+
+<button class="save"
+onclick="saveConfig()">
+
+Save Configuration
+
+</button>
+
+</div>
+
+<script>
+
+function loadConfig(){
+
+document.getElementById("shopName")
+.value =
+localStorage.getItem("shopName")
+|| "";
+
+document.getElementById("shopAddress")
+.value =
+localStorage.getItem("shopAddress")
+|| "";
+
+}
+
+function saveConfig(){
+
+localStorage.setItem(
+"shopName",
+document.getElementById("shopName")
+.value
+);
+
+localStorage.setItem(
+"shopAddress",
+document.getElementById("shopAddress")
+.value
+);
+
+alert(
+"Configuration Saved Successfully"
+);
+
+}
+
+loadConfig();
+
+</script>
+
+</body>
+
+</html>
